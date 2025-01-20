@@ -19,6 +19,12 @@
 
 The Bangalore Pathfinding Visualizer is a tool that visualizes various pathfinding algorithms on a map of Bangalore city. It allows users to see how algorithms like BFS, DFS, Bellman-Ford, Dijkstra, and A-Star find paths across a real-world map.
 
+## Demo
+![Demo Video](outputGif.gif)
+
+[Watch the full video](outputRecording.mp4)
+
+
 ## Installation
 
 1. Clone this repository: `git clone https://github.com/yourusername/bangalore-pathfinding-visualizer.git`
