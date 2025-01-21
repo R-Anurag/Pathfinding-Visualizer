@@ -2,10 +2,6 @@
 
 #### Welcome to the Pathfinding Visualizer repository! Explore and compare different pathfinding algorithms on a map of Bangalore city. 🌟🗺️
 
-### **You should be aware:-** 
-- *First Load*: When you load the visualizer for the first time, it's like a map unfolding in front of you. 🌍 It might take a moment as the data loads in (this is just how map visualizations function).
-- *Subsequent operations*: Once the data is cached, subsequent functioning will be swift, bringing the map and pathfinding algorithms to life in an instant. 🚀
-
 ## Table of Contents
 
 1. Introduction
