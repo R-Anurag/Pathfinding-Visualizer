@@ -24,7 +24,7 @@
 
 ## Installation
 
-1. Clone this repository: `git clone https://github.com/yourusername/bangalore-pathfinding-visualizer.git`
+1. Clone this repository: `git clone https://github.com/R-Anurag/Map-Implementation-Path-Finding-Algorithms.git`
 2. Install dependencies: `pip install -r requirements.txt`
 3. Run the visualizer: `python main.py`
 
@@ -33,7 +33,7 @@
 ## Usage
 
 - Select the pathfinding algorithm you want to use from the menu.
-- Click on the map to set the start and end points.
+- Click on the map to set the start and end points (red and green location markers).
 - Watch as the algorithm finds the shortest path on the map.
 - Press C on the keyboard to compare the performance(time & distance) of different algorithms in real-time
 
