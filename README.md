@@ -1,4 +1,4 @@
-# 🗺️ Bangalore Pathfinding Visualizer
+# 🗺️ Pathfinding Visualizer With Real-Time Map Data
 
 #### Explore and compare different pathfinding algorithms on a map of Bangalore city. 
 - A GUI interface that visualizes various pathfinding algorithms on a real-time map of Bangalore city. 
@@ -24,7 +24,7 @@
 
 ## Installation
 
-1. Clone this repository: `git clone https://github.com/R-Anurag/Map-Implementation-Path-Finding-Algorithms.git`
+1. Clone this repository: `git clone https://github.com/R-Anurag/Pathfinding-Visualizer.git`
 2. Install dependencies: `pip install -r requirements.txt`
 3. Run the visualizer: `python main.py`
 
