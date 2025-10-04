@@ -6,76 +6,79 @@ import heapq
 from shapely.geometry import LineString
 from geopy.distance import geodesic
 
-
 def heuristic_fn(node_a, node_b, G):
     """
-    Heuristic function that estimates the distance (in meters)
-    between two nodes in the OSMnx graph using geodesic distance.
+    Heuristic function estimating distance (meters) between two nodes in an OSMnx graph
+    using geodesic distance.
 
     Parameters:
         node_a (int): ID of the first node
         node_b (int): ID of the second node
-        G (networkx.MultiDiGraph): The OSMnx road network graph
+        G (networkx.MultiDiGraph): OSMnx road network graph
 
     Returns:
-        float: Estimated distance in meters between node_a and node_b
+        float: Estimated distance in meters
     """
     lat1, lon1 = G.nodes[node_a]['y'], G.nodes[node_a]['x']
     lat2, lon2 = G.nodes[node_b]['y'], G.nodes[node_b]['x']
     return geodesic((lat1, lon1), (lat2, lon2)).meters
-    
-# Tracing Greedy Best-First Algorithm
-def trace_greedy_best_first_search(start, goal, graph):
+
+
+def trace_greedy_bfs(start, goal, G):
     """
-    :param start: starting node (object or id)
-    :param goal: goal node
-    :param graph: adjacency structure, e.g. graph[node] = list of neighbors
-    :param heuristic_fn: function h(node, goal)
-    :return: visited_order (list), path (list) or None if no path
+    Traces Greedy Best-First Search on a graph as a generator.
+    Yields (visited, predecessors) at each step.
+
+    Parameters:
+        start (int): Starting node ID
+        goal (int): Goal node ID
+        G (networkx.Graph or adjacency dict): Graph or adjacency dict
     """
-    visited_order = []
-    # Priority queue keyed only by heuristic
+    visited = {start: 0}  # visited dict with distance/order info
+    predecessors = {start: None}
     open_heap = []
-    # store mapping of node -> best heuristic seen so far
-    best_h = {start: heuristic_fn(start, goal, graph)}
-    heapq.heappush(open_heap, (best_h[start], start))
-    came_from = {}
+
+    # Initial heuristic for the start node
+    heapq.heappush(open_heap, (heuristic_fn(start, goal, G), start))
 
     while open_heap:
         h_cur, current = heapq.heappop(open_heap)
-        # Possibly skip duplicates
-        if current in visited_order:
+
+        # Skip if already visited
+        if current in visited and visited[current] != 0:
             continue
 
-        visited_order.append(current)
+        # Mark current node as visited (distance/order info can be arbitrary for BFS style)
+        visited[current] = visited.get(current, 0)
 
+        # Yield current state
+        yield visited, predecessors
+
+        # Stop if goal reached
         if current == goal:
-            # reconstruct path
-            path = []
-            node = goal
-            while node in came_from:
-                path.append(node)
-                node = came_from[node]
-            path.append(start)
-            path.reverse()
-            return visited_order, path
+            return
 
-        for neighbor in graph.get(current, []):
-            # skip if neighbor already visited
-            if neighbor in visited_order:
-                continue
+        # Get neighbors
+        neighbors = G[current] if hasattr(G, 'neighbors') else G.get(current, [])
 
-            h_n = heuristic_fn(neighbor, goal, graph)
-            # if this heuristic is better than previous seen
-            if neighbor not in best_h or h_n < best_h[neighbor]:
-                best_h[neighbor] = h_n
-                came_from[neighbor] = current
-                heapq.heappush(open_heap, (h_n, neighbor))
+        for neighbor in neighbors:
+            if neighbor not in visited:
+                predecessors[neighbor] = current
+                h_neighbor = heuristic_fn(neighbor, goal, G)
+                heapq.heappush(open_heap, (h_neighbor, neighbor))
 
-    # No path found
-    return visited_order, None
+
 
 def manhattan(a, b):
+    """
+    Manhattan distance heuristic (for grid-style graphs)
+
+    Parameters:
+        a, b: objects with x and y attributes
+
+    Returns:
+        float: Manhattan distance
+    """
     return abs(a.x - b.x) + abs(a.y - b.y)
 
 # Tracing Dijkstra's Algorithm
