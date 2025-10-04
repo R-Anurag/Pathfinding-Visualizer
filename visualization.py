@@ -56,6 +56,8 @@ def trace_greedy_best_first_search(start, goal, graph, heuristic_fn):
     # No path found
     return visited_order, None
 
+def manhattan(a, b):
+    return abs(a.x - b.x) + abs(a.y - b.y)
 
 # Tracing Dijkstra's Algorithm
 def trace_dijkstra(G, start, end):
@@ -162,5 +164,6 @@ def trace_dfs(G, start, end):
                 predecessors[neighbor] = current
                 stack.append(neighbor)
                 yield visited, predecessors
+
 
 
