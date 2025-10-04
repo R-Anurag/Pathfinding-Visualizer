@@ -5,6 +5,58 @@ import numpy as np
 import heapq
 from shapely.geometry import LineString
 
+# Tracing Greedy Best-First Algorithm
+def trace_greedy_best_first_search(start, goal, graph, heuristic_fn):
+    """
+    :param start: starting node (object or id)
+    :param goal: goal node
+    :param graph: adjacency structure, e.g. graph[node] = list of neighbors
+    :param heuristic_fn: function h(node, goal)
+    :return: visited_order (list), path (list) or None if no path
+    """
+    visited_order = []
+    # Priority queue keyed only by heuristic
+    open_heap = []
+    # store mapping of node -> best heuristic seen so far
+    best_h = {start: heuristic_fn(start, goal)}
+    heapq.heappush(open_heap, (best_h[start], start))
+    came_from = {}
+
+    while open_heap:
+        h_cur, current = heapq.heappop(open_heap)
+        # Possibly skip duplicates
+        if current in visited_order:
+            continue
+
+        visited_order.append(current)
+
+        if current == goal:
+            # reconstruct path
+            path = []
+            node = goal
+            while node in came_from:
+                path.append(node)
+                node = came_from[node]
+            path.append(start)
+            path.reverse()
+            return visited_order, path
+
+        for neighbor in graph.get(current, []):
+            # skip if neighbor already visited
+            if neighbor in visited_order:
+                continue
+
+            h_n = heuristic_fn(neighbor, goal)
+            # if this heuristic is better than previous seen
+            if neighbor not in best_h or h_n < best_h[neighbor]:
+                best_h[neighbor] = h_n
+                came_from[neighbor] = current
+                heapq.heappush(open_heap, (h_n, neighbor))
+
+    # No path found
+    return visited_order, None
+
+
 # Tracing Dijkstra's Algorithm
 def trace_dijkstra(G, start, end):
     queue = [start]
@@ -110,4 +162,5 @@ def trace_dfs(G, start, end):
                 predecessors[neighbor] = current
                 stack.append(neighbor)
                 yield visited, predecessors
+
 
