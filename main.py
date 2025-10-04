@@ -448,7 +448,7 @@ def reset_trace():
     # Reset traces for new start point
     traces = {
         'dijkstra': trace_dijkstra(G, start, end),
-        'greedy_best_first_search': trace_greedy_best_first_search(start, end, G, ),
+        'greedy_best_first_search': trace_greedy_best_first_search(start, end, G),
         'a_star': trace_a_star(G, start, end),
         'bellman_ford': trace_bellman_ford(G, start, end),
         'bfs': trace_bfs(G, start, end),
@@ -534,6 +534,7 @@ def compare_paths(screen, G, start, end):
     # Calculate paths for each algorithm
     traces = {
         'dijkstra': trace_dijkstra(G, start, end),
+        'greedy_best_first_search': trace_greedy_best_first_search(start, end, G),
         'a_star': trace_a_star(G, start, end),
         'bellman_ford': trace_bellman_ford(G, start, end),
         'bfs': trace_bfs(G, start, end),
@@ -577,7 +578,9 @@ def change_algorithm(name):
     current_page = "visualizer"
 
     if name == "Dijkstra's":
-        algorithm = "dijkstra"     
+        algorithm = "dijkstra"
+    elif name == "GBFS (Greedy Best First Search)":
+        algorithm = "greedy_best_first_search"
     elif name == "A* (A-Star)":
         algorithm = "a_star"
     elif name == "BFS (Breadth First Search)":
@@ -803,6 +806,7 @@ current_page = "menu"
 algorithm = 'dijkstra'  # Set the initial algorithm to use
 traces = {
     'dijkstra': trace_dijkstra(G, start, end),
+    'greedy_best_first_search': trace_greedy_best_first_search(start, end, G),
     'a_star': trace_a_star(G, start, end),
     'bellman_ford': trace_bellman_ford(G, start, end),
     'bfs': trace_bfs(G, start, end),
@@ -828,4 +832,5 @@ while running:
     
 
 pygame.quit()
+
 
