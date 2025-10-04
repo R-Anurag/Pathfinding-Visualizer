@@ -50,6 +50,15 @@
 
 ---
 
+# Keyboard Controls
+
+| Key | Action |
+|-----|--------|
+| C | Enable Compare Paths mode — lets you cycle through and compare different algorithms’ paths. |
+| ↑ (Up Arrow) | Cycle backward through available algorithms in Compare Paths mode. |
+| ↓ (Down Arrow) | Cycle forward through available algorithms in Compare Paths mode. |
+
+
 ## Usage
 
 - Select the pathfinding algorithm you want to use from the menu.
