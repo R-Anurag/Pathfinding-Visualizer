@@ -4,6 +4,79 @@ import networkx as nx
 import numpy as np
 import heapq
 from shapely.geometry import LineString
+from geopy.distance import geodesic
+
+
+def heuristic_fn(node_a, node_b, G):
+    """
+    Heuristic function that estimates the distance (in meters)
+    between two nodes in the OSMnx graph using geodesic distance.
+
+    Parameters:
+        node_a (int): ID of the first node
+        node_b (int): ID of the second node
+        G (networkx.MultiDiGraph): The OSMnx road network graph
+
+    Returns:
+        float: Estimated distance in meters between node_a and node_b
+    """
+    lat1, lon1 = G.nodes[node_a]['y'], G.nodes[node_a]['x']
+    lat2, lon2 = G.nodes[node_b]['y'], G.nodes[node_b]['x']
+    return geodesic((lat1, lon1), (lat2, lon2)).meters
+    
+# Tracing Greedy Best-First Algorithm
+def trace_greedy_best_first_search(start, goal, graph):
+    """
+    :param start: starting node (object or id)
+    :param goal: goal node
+    :param graph: adjacency structure, e.g. graph[node] = list of neighbors
+    :param heuristic_fn: function h(node, goal)
+    :return: visited_order (list), path (list) or None if no path
+    """
+    visited_order = []
+    # Priority queue keyed only by heuristic
+    open_heap = []
+    # store mapping of node -> best heuristic seen so far
+    best_h = {start: heuristic_fn(start, goal, graph)}
+    heapq.heappush(open_heap, (best_h[start], start))
+    came_from = {}
+
+    while open_heap:
+        h_cur, current = heapq.heappop(open_heap)
+        # Possibly skip duplicates
+        if current in visited_order:
+            continue
+
+        visited_order.append(current)
+
+        if current == goal:
+            # reconstruct path
+            path = []
+            node = goal
+            while node in came_from:
+                path.append(node)
+                node = came_from[node]
+            path.append(start)
+            path.reverse()
+            return visited_order, path
+
+        for neighbor in graph.get(current, []):
+            # skip if neighbor already visited
+            if neighbor in visited_order:
+                continue
+
+            h_n = heuristic_fn(neighbor, goal, graph)
+            # if this heuristic is better than previous seen
+            if neighbor not in best_h or h_n < best_h[neighbor]:
+                best_h[neighbor] = h_n
+                came_from[neighbor] = current
+                heapq.heappush(open_heap, (h_n, neighbor))
+
+    # No path found
+    return visited_order, None
+
+def manhattan(a, b):
+    return abs(a.x - b.x) + abs(a.y - b.y)
 
 # Tracing Dijkstra's Algorithm
 def trace_dijkstra(G, start, end):
@@ -110,4 +183,7 @@ def trace_dfs(G, start, end):
                 predecessors[neighbor] = current
                 stack.append(neighbor)
                 yield visited, predecessors
+
+
+
 

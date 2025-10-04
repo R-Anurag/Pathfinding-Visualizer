@@ -6,7 +6,7 @@ import os
 from PIL import Image
 from shapely.geometry import Polygon, LineString, MultiLineString
 from geopy.distance import distance as geopy_distance
-from visualization import trace_dijkstra, trace_a_star, trace_bellman_ford, trace_bfs, trace_dfs
+from visualization import trace_greedy_best_first_search, trace_dijkstra, trace_a_star, trace_bellman_ford, trace_bfs, trace_dfs
 import math
 
 
@@ -81,6 +81,7 @@ vehicle_image = car_image
 # Define colors for each algorithm's path
 COLORS = {
     'dijkstra': (255, 69, 0),  # Bright Orange Red
+    'greedy_best_first_search': (205, 130, 50), 
     'a_star': (50, 205, 50),  # Lime Green
     'bellman_ford': (0, 191, 255),  # Deep Sky Blue
     'bfs': (255, 215, 0),  # Gold
@@ -328,7 +329,7 @@ class ButtonLayout:
             button.check_click(mouse_pos, mouse_pressed)
 
  
-button_texts = ["Dijkstra's", "A* (A-Star)", "BFS (Breadth First Search)", "DFS (Depth First Search)", "Bellman-Ford"]
+button_texts = ["Dijkstra's", "GBFS (Greedy Best First Search)", "A* (A-Star)", "BFS (Breadth First Search)", "DFS (Depth First Search)", "Bellman-Ford"]
 button_layout = ButtonLayout(screen_width/7, screen_width/5, 50, 20, 5, 1, button_texts, 24, (255, 255, 255), (228, 177, 240, 255), BUTTON_BG_COLOR, ROAD_COLOR, 4)
 
 
@@ -447,6 +448,7 @@ def reset_trace():
     # Reset traces for new start point
     traces = {
         'dijkstra': trace_dijkstra(G, start, end),
+        'greedy_best_first_search': trace_greedy_best_first_search(start, end, G),
         'a_star': trace_a_star(G, start, end),
         'bellman_ford': trace_bellman_ford(G, start, end),
         'bfs': trace_bfs(G, start, end),
@@ -513,6 +515,7 @@ def compare_paths(screen, G, start, end):
     # Initialize path dictionaries and stats
     paths = {
         'dijkstra': [],
+        'greedy_best_first_search': [],
         'a_star': [],
         'bellman_ford': [],
         'bfs': [],
@@ -521,6 +524,7 @@ def compare_paths(screen, G, start, end):
 
     stats = {
         'dijkstra': {'distance': 0, 'time': 0},
+        'greedy_best_first_search': {'distance': 0, 'time': 0}
         'a_star': {'distance': 0, 'time': 0},
         'bellman_ford': {'distance': 0, 'time': 0},
         'bfs': {'distance': 0, 'time': 0},
@@ -530,6 +534,7 @@ def compare_paths(screen, G, start, end):
     # Calculate paths for each algorithm
     traces = {
         'dijkstra': trace_dijkstra(G, start, end),
+        'greedy_best_first_search': trace_greedy_best_first_search(start, end, G),
         'a_star': trace_a_star(G, start, end),
         'bellman_ford': trace_bellman_ford(G, start, end),
         'bfs': trace_bfs(G, start, end),
@@ -573,7 +578,9 @@ def change_algorithm(name):
     current_page = "visualizer"
 
     if name == "Dijkstra's":
-        algorithm = "dijkstra"     
+        algorithm = "dijkstra"
+    elif name == "GBFS (Greedy Best First Search)":
+        algorithm = "greedy_best_first_search"
     elif name == "A* (A-Star)":
         algorithm = "a_star"
     elif name == "BFS (Breadth First Search)":
@@ -799,6 +806,7 @@ current_page = "menu"
 algorithm = 'dijkstra'  # Set the initial algorithm to use
 traces = {
     'dijkstra': trace_dijkstra(G, start, end),
+    'greedy_best_first_search': trace_greedy_best_first_search(start, end, G),
     'a_star': trace_a_star(G, start, end),
     'bellman_ford': trace_bellman_ford(G, start, end),
     'bfs': trace_bfs(G, start, end),
@@ -824,3 +832,5 @@ while running:
     
 
 pygame.quit()
+
+
