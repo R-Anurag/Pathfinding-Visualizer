@@ -6,6 +6,26 @@
 
 ---
 
+![image](https://github.com/jineshnagori/DevBlog/blob/main/assets/img/hacktoberfest.png)
+
+<h1 align="center"> Hacktoberfest 2025 </h1>
+
+<div align="center">
+<a href="https://hacktoberfest.com/"> 🔗 Link To HacktoberFest 2025 </a>
+</div>
+
+---
+
+## 🛠 Steps For Contribution
+
+1. **Star** ⭐ this repo  
+2. **Fork** this repo  
+3. Add your file inside the **appropriate folder**  
+4. **Commit** your changes  
+5. **Open a Pull Request**  
+
+---
+
 ## Features
 - **Pathfinding Algorithms**: Implementations of BFS, DFS, Bellman-Ford, Dijkstra, and A-Star.
 - **Interactive Map**: Real-time rendering of the map and paths.
