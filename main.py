@@ -884,7 +884,6 @@ def algo_visualizer():
     }
     algo_name = algo_map.get(algorithm, algorithm)
     draw_complexity_info(screen, algo_name)
-   
 
 def draw_vehicle_movement():
     global current_vehicle_pos_index, vehicle_path, vehicle_images
@@ -950,6 +949,5 @@ while running:
 
     pygame.display.flip()
     clock.tick(60)
-
 
 pygame.quit()
