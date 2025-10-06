@@ -5,6 +5,9 @@ import numpy as np
 import heapq
 from shapely.geometry import LineString
 from geopy.distance import geodesic
+import math
+from complexity import algorithm_complexities
+pygame.init()
 
 def heuristic_fn(node_a, node_b, G):
     """
@@ -186,6 +189,47 @@ def trace_dfs(G, start, end):
                 predecessors[neighbor] = current
                 stack.append(neighbor)
                 yield visited, predecessors
+def draw_complexity_info(screen, algorithm_name):
+    if algorithm_name not in algorithm_complexities:
+        return
+
+    # Fonts
+    heading_font = pygame.font.SysFont("consolas", 22, bold=True)
+    body_font = pygame.font.SysFont("consolas", 20)
+
+    # Text surfaces (white for better readability)
+    algo_text = heading_font.render(f"Algorithm: {algorithm_name}", True, (255, 255, 255))
+    time_text = body_font.render(f"Time Complexity: {algorithm_complexities[algorithm_name]['time']}", True, (255, 255, 255))
+    space_text = body_font.render(f"Space Complexity: {algorithm_complexities[algorithm_name]['space']}", True, (255, 255, 255))
+
+    texts = [algo_text, time_text, space_text]
+
+    # Auto box width and height (fit to content + padding)
+    padding_x, padding_y = 15, 12
+    width = max(t.get_width() for t in texts) + 2 * padding_x
+    height = sum(t.get_height() for t in texts) + (len(texts) - 1) * 6 + 2 * padding_y  # added line spacing
+
+    # Box surface with border radius and darker purple bg
+    box = pygame.Surface((width, height), pygame.SRCALPHA)
+    box.fill((0, 0, 0, 0))  # transparent base
+
+    bg_color = (111, 66, 193, 200)  # darker vibrant purple with alpha
+    border_color = (200, 160, 255)  # lighter purple border
+
+    pygame.draw.rect(box, bg_color, box.get_rect(), border_radius=8)
+    pygame.draw.rect(box, border_color, box.get_rect(), 2, border_radius=8)
+
+    # Blit text with spacing inside the box
+    y = padding_y
+    for t in texts:
+        box.blit(t, (padding_x, y))
+        y += t.get_height() + 6  # vertical spacing
+
+    # Place bottom-left corner
+    screen.blit(box, (20, screen.get_height() - height - 20))                
+                
+
+
 
 
 

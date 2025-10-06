@@ -6,8 +6,9 @@ import os
 from PIL import Image
 from shapely.geometry import Polygon, LineString, MultiLineString
 from geopy.distance import distance as geopy_distance, geodesic
-from visualization import trace_greedy_bfs, trace_dijkstra, trace_a_star, trace_bellman_ford, trace_bfs, trace_dfs
+from visualization import trace_greedy_bfs, trace_dijkstra, trace_a_star, trace_bellman_ford, trace_bfs, trace_dfs, draw_complexity_info
 import math
+from complexity import algorithm_complexities
 
 # ----------------------------------------------------------------------------- 
 # Initialize Pygame
@@ -873,7 +874,16 @@ def algo_visualizer():
         pass
 
     display_instructions_OR_map_heading_section(screen)
-
+    algo_map = {
+    "dijkstra": "Dijkstra",
+    "greedy_bfs": "Greedy-BFS",
+    "a_star": "A-Star",
+    "bellman_ford": "Bellman-Ford",
+    "bfs": "BFS",
+    "dfs": "DFS"
+    }
+    algo_name = algo_map.get(algorithm, algorithm)
+    draw_complexity_info(screen, algo_name)
 
 def draw_vehicle_movement():
     global current_vehicle_pos_index, vehicle_path, vehicle_images
@@ -939,6 +949,5 @@ while running:
 
     pygame.display.flip()
     clock.tick(60)
-
 
 pygame.quit()
